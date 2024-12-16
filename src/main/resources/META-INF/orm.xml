@@ -2,6 +2,7 @@
 <entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm" version="2.2">
     <named-query name="MobileSuit.findAllOrderByStatus">
         <query>
+            <!-- 현재 MS의 운용상태 > 세력 > 제조비용 별로 order by  -->
             SELECT m FROM MobileSuit m ORDER BY
             CASE m.msStatus
             WHEN '운용중' THEN 1
