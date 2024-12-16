@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Catalog Registration</title>
+    <link rel="stylesheet" href="/style.css">
+    <script>
+        function showForm() {
+            const target = document.getElementById("targetType").value;
+            document.getElementById("mobileSuitForm").style.display = target === "mobileSuit" ? "block" : "none";
+            document.getElementById("orderCompanyForm").style.display = target === "orderCompany" ? "block" : "none";
+            document.getElementById("factionForm").style.display = target === "faction" ? "block" : "none";
+        }
+    </script>
+</head>
+<body>
+<label for="targetType">등록 항목 선택:</label>
+<select id="targetType" onchange="showForm()">
+    <option value="">선택</option>
+    <option value="mobileSuit">모빌슈츠</option>
+    <option value="orderCompany">제조사</option>
+    <option value="faction">세력</option>
+</select>
+
+<!-- Mobile Suit Form -->
+<form id="mobileSuitForm" action="/mobileSuit/registerMobileSuit" method="post" style="display:none;">
+    <label>형식번호: <input type="text" name="msId"></label><br>
+    <label>명칭: <input type="text" name="msName"></label><br>
+    <label>타입: <input type="text" name="msType"></label><br>
+    <label>상태: <input type="text" name="msStatus"></label><br>
+    <label>코스트: <input type="number" name="msCost"></label><br>
+    <label>제조사 이름: <input type="text" name="companyName"></label><br>
+    <label>세력 이름: <input type="text" name="factionName"></label><br>
+    <button type="submit">모빌슈츠 등록</button>
+</form>
+
+<!-- Order Company Form -->
+<form id="orderCompanyForm" action="/company/register" method="post" style="display:none;">
+    <label>회사명: <input type="text" name="companyName"></label><br>
+    <button type="submit">제조사 등록</button>
+</form>
+
+<!-- Faction Form -->
+<form id="factionForm" action="/faction/register" method="post" style="display:none;">
+    <label>세력명: <input type="text" name="factionName"></label><br>
+    <button type="submit">세력 등록</button>
+</form>
+</body>
+</html>
