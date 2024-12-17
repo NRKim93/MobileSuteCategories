@@ -1,3 +1,8 @@
+<!--
+초기 화면 표시.
+엔티티 통해서 전체 데이터를 SELECT 해서 리스트화 한 후 화면 표시 기능
+-->
+
 <!DOCTYPE html>
 <html lang="kr" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -6,7 +11,16 @@
     <link rel="stylesheet" href="/style.css">
     <script>
         function moveRegister() {
-            window.location.href = "/mobileSuit/register"; <!-- 등록페이지 이동 함수 -->
+            //  라디오 버튼 선택 후 submit 클릭 시 선택된 ms의 형식번호를 파라미터로 해서 Controller에 전송
+            const selectedRadio  = document.querySelector('input[name="selectedMsId"]:checked');
+            let url = "/mobileSuit/register"
+
+            if (selectedRadio ) {
+                //url += "?selectedMsId=" + selectedRadio.value;
+                url += "?selectedMsId=" + selectedRadio.value;
+            }
+
+            window.location.href = url;
         }
     </script>
 </head>
@@ -33,6 +47,7 @@
 <table>
     <thead>
     <tr>
+        <th>선택</th>
         <th>No</th>
         <th>형식번호</th>
         <th>명칭</th>
@@ -44,19 +59,22 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="suit, iterStat : ${suitList}">
+    <tr th:each="ms, iterStat : ${msList}">
+        <td>
+            <input type="radio" name="selectedMsId" th:value="${ms.msId}">
+        </td>
         <td th:text="${iterStat.index + 1}"></td>
-        <td th:text="${suit.msId}"></td>
-        <td th:text="${suit.msName}"></td>
-        <td th:text="${suit.company.companyName}"></td>
-        <td th:text="${suit.faction.factionName}"></td>
-        <td th:text="${suit.msType}"></td>
-        <td th:text="${suit.msStatus}"></td>
-        <td th:text="${suit.msCost} + ' 원'"></td>
+        <td th:text="${ms.msId}"></td>
+        <td th:text="${ms.msName}"></td>
+        <td th:text="${ms.company.companyName}"></td>
+        <td th:text="${ms.faction.factionName}"></td>
+        <td th:text="${ms.msType}"></td>
+        <td th:text="${ms.msStatus}"></td>
+        <td th:text="${ms.msCost} + ' 원'"></td>
     </tr>
     </tbody>
 </table>
 <br>
-<input type="button" onclick="moveRegister()" value="등록">  <!-- 등록페이지 이동 버튼 -->
+<input type="button" onclick="moveRegister()" value="등록 / 수정">  <!-- 등록페이지 이동 버튼 -->
 </body>
 </html>

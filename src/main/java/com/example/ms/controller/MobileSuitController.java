@@ -17,28 +17,30 @@ public class MobileSuitController {
 
     private final MobileSuitService service;
     private final MobileSuitRepository repository;
-
+    
+    // 초기 화면 표시 
     @GetMapping("/list")
     public String getMobileSuitList(@RequestParam(value = "type", required = false) String msType, Model model) {
-        List<MobileSuit> suits = repository.findAllOrderByStatus();
-        model.addAttribute("suitList", suits);
+        List<MobileSuit> ms = repository.findAllOrderByStatus();
+        model.addAttribute("msList", ms);
         return "list";
     }
 
+    // DB에 있는 값들 SELECT 해 온 데이터들 화면에 넘겨주는 기능
     @GetMapping("/search")
     public String searchMobileSuit(
             @RequestParam(value = "filterType", required = false) String filterType,
             @RequestParam(value = "filterValue", required = false) String filterValue,
             Model model) {
-        List<MobileSuit> suits;
+        List<MobileSuit> ms;
 
         if(filterType == null || filterValue == null ||filterValue.trim().isEmpty()) {
-            suits = service.getAllMobileSuits();
+            ms = service.getAllMobileSuits();
         } else {
-            suits = service.getFilteredMobileSuits(filterType, filterValue);
+            ms = service.getFilteredMobileSuits(filterType, filterValue);
         }
 
-        model.addAttribute("suitList", suits);
+        model.addAttribute("suitList", ms);
         return "list";
     }
 

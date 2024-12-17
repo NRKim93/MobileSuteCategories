@@ -1,0 +1,12 @@
+<!--
+  등록 화면에서 공통으로 쓰이는 공용 필터 선택 라벨 폼
+-->
+<div th:fragment="commonFilter" id="commonFilter">
+  <label for="targetType">등록 항목 선택:</label>
+  <select id="targetType" onchange="showForm()">
+    <option value="">선택</option>
+    <option value="mobileSuit">모빌슈츠</option>
+    <option value="orderCompany">제조사</option>
+    <option value="faction">세력</option>
+  </select>
+</div>

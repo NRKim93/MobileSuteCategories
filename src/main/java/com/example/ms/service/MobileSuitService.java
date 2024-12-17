@@ -29,6 +29,7 @@ public class MobileSuitService {
         ms.setMsStatus(msStatus);
         ms.setMsCost(msCost);
 
+        // 제작사 명을 받아와서 COMPANY 엔티티 값과 비교. 값이 있으면 그거 이용, 없으면 신규 등록
         Company company = companyRepository.findByCompanyName(companyName)
                                            .orElseGet(() -> {
                                                Company c = new Company();
@@ -37,6 +38,7 @@ public class MobileSuitService {
                                            });
         ms.setCompany(company);
 
+        // ms의 소속 세력 명을 받아와서 GACTION 엔티티 값과 비교. 값이 있으면 그거 이용, 없으면 신규 등록
         Faction faction = factionRepository.findByFactionName(factionName)
                                            .orElseGet(() -> {
                                                Faction f = new Faction();
@@ -48,32 +50,12 @@ public class MobileSuitService {
          return repository.save(ms);  // DB 저장
     }
 
-    // 특정 유형의 MS 검색
-    public List<MobileSuit> getByType(String msType) {
-        return repository.findByMsType(msType);  // 자동 SQL 생성
-    }
-
     public List<MobileSuit> getAllMobileSuits() {
         return repository.findAll(); // 모든 데이터 조회
     }
 
-    public List<MobileSuit> getMobileSuits(String msType) {
-        if (msType == null || msType.trim().isEmpty()) {
-            return repository.findAll(); // 모든 리스트 반환
-        } else {
-            return repository.findByMsType(msType); // 조건에 맞는 리스트 반환
-        }
-    }
-
-    public String getMobileSuitName(String msType) {
-        System.out.println("Fetching Mobile Suit for type: " + msType);
-        Optional<MobileSuit> ms = repository.findByMsType(msType).stream().findFirst();
-        String result = ms.map(MobileSuit::getMsName).orElse("모바일 슈트 없음");
-        System.out.println("Service result: " + result);
-        return result;
-    }
-
-
+    //  list 화면에서 필터링 거는 기능, 필터링은 ms의 타입 (양산기, 전용기 등), 상태 (운용중, 수주(개발중), 단종 등)
+    //  세력(지구연방, 지온 등), 제조사 (AE, 지오닉사 등)
     public List<MobileSuit> getFilteredMobileSuits(String filterType, String filterValue) {
         switch (filterType) {
             case "type":
@@ -87,5 +69,24 @@ public class MobileSuitService {
             default:
                 return getAllMobileSuits(); // 전체 리스트 반환
         }
+    }
+
+    // SELECT * FROM MOBILE_SUITE
+    public MobileSuit getAllMobileSuitsById(String msId) {
+        return repository.findById(msId)
+                         .orElseThrow(() -> new IllegalArgumentException("No MS found with id: " + msId));
+    }
+
+    // 현재 MS의 상태 갱신 기능
+    public void updateMobileSuit(String msId, String msStatus) {
+        MobileSuit ms = repository.findById(msId)
+                                   .orElseThrow(() -> new IllegalArgumentException("No MS found with id: " + msId));
+        ms.setMsStatus(msStatus);
+
+        repository.save(ms);
+    }
+
+    public Optional<MobileSuit> getMobileSuitById(String msId) {
+        return repository.findById(msId);
     }
 }
